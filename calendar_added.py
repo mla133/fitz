@@ -69,7 +69,8 @@ add_settings_text(page4, alt_margins, "Margin lines: Red\nGrid lines: Every 50 p
 page5 = doc.new_page(width=page_width, height=page_height)
 now = datetime.now()
 cal_text = calendar.month(now.year, now.month)
-page5.insert_text((72, 72), f"Calendar - {now.strftime('%B %Y')}\n\n{cal_text}", fontsize=12, fontname="Courier", color=(0, 0, 0))
+#page5.insert_text((72, 72), f"Calendar - {now.strftime('%B %Y')}\n\n{cal_text}", fontsize=16, fontname="Courier", color=(0, 0, 0))
+page5.insert_text((72, 72), f"{cal_text}", fontsize=16, fontname="Courier", color=(0, 0, 0))
 
 # Save the PDF
 doc.save("multi_layout_with_calendar.pdf")
