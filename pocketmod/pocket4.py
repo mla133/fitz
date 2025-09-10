@@ -51,14 +51,8 @@ def create_pocketmod_pdf(output_path='pocketmod_output.pdf', input_pdf_path=None
             text = f"Page {i + 1}"
             page.insert_textbox(rect, text, fontsize=80, rotate=rotation, align=1)
 
-        img_rect = fitz.Rect(
-            (i % 2) * page_width,
-            (i // 2) * page_height,
-            (i % 2 + 1) * page_width,
-            (i // 2 + 1) * page_height
-        )
-        # Draw red rectangle to show page edges
-        page.draw_rect(img_rect, color=(0, 0, 0), width=1)
+        #page.draw_rect(rect, color=(1, 0, 0), width=1) # Red border around mini-page
+        page.draw_rect(rect, color=(0, 0, 0), width=1) # Black border around mini-page
 
     # Save the final PDF
     doc.save(output_path)
@@ -66,4 +60,4 @@ def create_pocketmod_pdf(output_path='pocketmod_output.pdf', input_pdf_path=None
 
 # Example usage:
 #create_pocketmod_pdf()  # Generates dummy content
-create_pocketmod_pdf(input_pdf_path='example.pdf')  # Uses pages from example.pdf
+create_pocketmod_pdf(input_pdf_path='fontsizes.pdf')  # Uses pages from example.pdf

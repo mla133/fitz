@@ -53,8 +53,8 @@ for i in range(8):
     page = doc.new_page(width=page_width, height=page_height)
     font_size = font_sizes[i]
     margins = default_margins if i % 2 == 0 else alt_margins
-    draw_margins(page, margins)
-    draw_grid(page, margins, grid_spacing)
+    #draw_margins(page, margins)
+    #draw_grid(page, margins, grid_spacing)
     add_font_size_label(page, margins, font_size)
     add_lorem_text(page, margins, font_size)
 

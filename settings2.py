@@ -1,51 +1,7 @@
+# Generates 8 sample pages of margin examples
+# Used as test example for pocketmod conversion
+
 import fitz  # PyMuPDF
-
-"""
-📘 Markdown Simulation Guide for PyMuPDF (fitz)
-
-PyMuPDF does not natively support Markdown, but you can simulate its formatting using font styles, sizes, and layout tricks.
-
-1. Headers
-   # Header 1 → fontsize=20
-   ## Header 2 → fontsize=16
-   ### Header 3 → fontsize=14
-   Use bold font ("helvb") or underline if needed.
-
-2. Bold and Italics
-   **Bold** → fontname="helvb"
-   *Italic* → fontname="helvi"
-
-3. Bullet Lists
-   - Item → use "•" symbol and indent (e.g., x + 20)
-   Example: page.insert_text((x + 20, y), "• Item", fontsize=12)
-
-4. Numbered Lists
-   1. Item → manually number and indent
-   Example: page.insert_text((x + 20, y), "1. Item", fontsize=12)
-
-5. Code Blocks
-   `code` or ```code``` → use monospaced font ("cour")
-   Optional: draw a light gray rectangle behind the text
-   Example:
-     page.insert_text((x, y), "print('Hello')", fontname="cour")
-     page.draw_rect(fitz.Rect(x, y, x + width, y + height), fill=(0.9, 0.9, 0.9))
-
-6. Blockquotes
-   > Quote → italic font, indent, optional vertical line
-   Example:
-     page.insert_text((x + 20, y), "Quote text", fontname="helvi")
-     page.draw_line((x + 10, y), (x + 10, y + 20), color=(0.5, 0.5, 0.5))
-
-7. Horizontal Rule
-   --- → draw a horizontal line
-   Example: page.draw_line((x, y), (x + width, y), color=(0.5, 0.5, 0.5))
-
-8. Links
-   text → display as plain text or underline
-   Example: page.insert_text((x, y), "Google", fontsize=12, color=(0, 0, 1))
-
-Note: All formatting must be manually applied. Markdown syntax is not interpreted by PyMuPDF.
-"""
 
 # Page dimensions
 page_width = 612
@@ -83,7 +39,7 @@ Margins:
   Bottom: {margins['bottom']} pts
 Layout:
   {layout_desc}"""
-    page.insert_text((margins['left'] + 10, margins['top'] + 20), settings_text, fontsize=20, color=(0, 0, 0))
+    page.insert_text((margins['left'] + 10, margins['top'] + 10), settings_text, fontsize=12, color=(0, 0, 0))
 
 # Page 1
 page1 = doc.new_page(width=page_width, height=page_height)
