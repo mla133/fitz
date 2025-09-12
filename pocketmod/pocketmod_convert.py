@@ -44,6 +44,15 @@ def create_pocketmod_pdf(output_path='pocketmod_output.pdf', input_pdf_path=None
 
         page.draw_rect(rect, color=(0, 0, 0), width=1)
 
+    # Add vertical cut line between mini pages 3,4,7,8 (rows 2 and 3)
+    cut_x = page_width / 2
+    cut_line_thickness = 0.5
+    cut_color = (1, 0, 0)  # Red
+    y_start = 1 * mini_height
+    y_end = 3 * mini_height
+    cut_line = fitz.Rect(cut_x, y_start, cut_x + cut_line_thickness, y_end)
+    page.draw_rect(cut_line, color=cut_color, width=cut_line_thickness)
+
     doc.save(output_path)
     doc.close()
 
