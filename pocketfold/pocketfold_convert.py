@@ -56,5 +56,5 @@ def create_pocketfold_pdf(output_path='pocketfold_output.pdf', input_pdf_path=No
     doc.close()
 
 # Example usage:
-#create_pocketfold_pdf()  # Dummy layout
-create_pocketfold_pdf(input_pdf_path=example_pdf)  # From input PDF
+create_pocketfold_pdf()  # Dummy layout
+#create_pocketfold_pdf(input_pdf_path=example_pdf)  # From input PDF
