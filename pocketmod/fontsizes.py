@@ -40,8 +40,9 @@ def draw_grid(page, margins, spacing, color=(0.7, 0.7, 0.7)):
 
 # Function to add font size label
 def add_font_size_label(page, margins, font_size):
-    label_text = f"Font Size: {font_size} pt"
-    page.insert_text((margins['left'], margins['top'] - 30), label_text, fontsize=10, color=(0, 0, 1))
+    #label_text = f"{page}, {font_size} pt"
+    label_text = f"{page}"
+    page.insert_text((margins['left'], margins['top'] - 30), label_text, fontsize=36, color=(0, 0, 1))
 
 # Function to add lorem text
 def add_lorem_text(page, margins, font_size):
