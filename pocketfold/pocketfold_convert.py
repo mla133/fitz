@@ -41,10 +41,9 @@ def create_pocketfold_pdf(output_path='pocketfold_output.pdf', input_pdf_path=No
         page1.draw_rect(rect, color=(0, 0, 0), width=1)
 
     # Add horizontal cut line between mini pages 5 & 6 (rows 2 and 3)
-    cut_y = page_height / 2
     cut_line_thickness = 0.5
     cut_color = (0, 1, 0)
-    cut_line = fitz.Rect(0, cut_y, page_width, cut_y + cut_line_thickness)
+    cut_line = fitz.Rect(0, page_height / 2, page_width / 2, (page_height / 2) + cut_line_thickness)
     page1.draw_rect(cut_line, color=cut_color, width=cut_line_thickness)
 
     # Second page: 2 half-pages
@@ -65,7 +64,7 @@ def create_pocketfold_pdf(output_path='pocketfold_output.pdf', input_pdf_path=No
             shape.draw_rect(rect)
             shape.finish(color=(0, 0, 1), fill=None)
             text = f"Page {page_index + 1}"
-            page2.insert_textbox(rect, text, fontsize=80, rotate=rotation, align=1)
+            page2.insert_textbox(rect, text, fontsize=36, rotate=rotation, align=1)
 
         page2.draw_rect(rect, color=(0, 0, 0), width=1)
 
@@ -73,5 +72,5 @@ def create_pocketfold_pdf(output_path='pocketfold_output.pdf', input_pdf_path=No
     doc.close()
 
 # Example usage:
-create_pocketfold_pdf()  # Dummy layout
-# create_pocketfold_pdf(input_pdf_path='fontsizes.pdf')  # From input PDF
+#create_pocketfold_pdf()  # Dummy layout
+create_pocketfold_pdf(input_pdf_path='generated_document.pdf')  # From input PDF

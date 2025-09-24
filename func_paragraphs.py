@@ -4,16 +4,16 @@ import textwrap
 def render_paragraphs_to_pdf(
     text,
     output_file="formatted_paragraphs.pdf",
-    page_width=595,
-    page_height=842,
-    left_margin=50,
-    top_margin=50,
-    right_margin=50,
-    bottom_margin=50,
+    page_width=612,
+    page_height=792,
+    left_margin=36,
+    top_margin=36,
+    right_margin=36,
+    bottom_margin=36,
     font_size=12,
     font_name="helv",
     line_spacing=1.5,
-    wrap_width=80
+    wrap_width=100
 ):
     """
     Renders a long string with multiple paragraphs into a PDF with proper spacing and wrapping.
