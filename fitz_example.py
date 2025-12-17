@@ -45,12 +45,12 @@ sample_y = height_pt / 2
 page.insert_text((sample_x, sample_y), sample_text, fontsize=sample_font_size, fontname="helv", fill=(0, 0, 0))
 
 # Save the populated PDF
-output_file = "mint_tin_template_populated.pdf"
+output_file = "mint_tin_template.pdf"
 doc.save(output_file)
 doc.close()
 
 # Testing to see if I can read the extracted text from the newly created file
-check_file = "ebook.pdf" 
+check_file = "mint_tin_template.pdf" 
 doc = fitz.open(check_file)
 page = doc[0]
 text = page.get_text()  # Extract all text
