@@ -13,6 +13,27 @@ pip install pymupdf
 Every script is run directly with `python` and reads/writes files in the
 **current working directory**, so `cd` into the script's folder first.
 
+## Unified converter (`fitz_convert.py`)
+
+```powershell
+python fitz_convert.py <layout> -i IN [IN ...] -o OUT.pdf [options]
+```
+
+Layouts: `pocketmod`, `pocketfold`, `zine`, `businesscard`, `minttin` (stub, not implemented yet; planned to fit standard and mini Altoids tins).
+`-i` takes one or more PDFs/images, concatenated in order. Options: `--page-size letter|a4`,
+`--no-guides` (omit borders/cut lines), `--placeholder` (no input; numbered or template cells),
+`--card-size WxH` (businesscard, inches). `zine` needs exactly 8 pages, `pocketfold` 10,
+`pocketmod` uses the first 8; `businesscard` tiles the first page or image.
+
+```powershell
+python fitz_convert.py pocketmod -i fontsizes.pdf -o pocketmod_output.pdf
+python fitz_convert.py businesscard -i card.png -o cards.pdf
+python fitz_convert.py -h
+```
+
+The original per-layout converters are archived in `obsolete/`; the sections below
+describe the source-PDF generators and the old workflow, so substitute `fitz_convert.py` for the `*_convert.py` / `bus_card.py` / `zine_imposed.py` steps.
+
 ## PocketFold (`pocketfold/`)
 
 An 8-page mini-book on one side of a Letter sheet, plus two half-page
