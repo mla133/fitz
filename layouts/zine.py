@@ -16,10 +16,11 @@ SIDES = [
 
 
 def add_arguments(parser):
-    pass
+    """No layout-specific options."""
 
 
 def build(src, output, opts):
+    """Write the 2-sided zine for `src` (exactly 8 pages, or None for placeholders) to `output`."""
     if src is not None and src.page_count != 8:
         raise ValueError(f"zine needs exactly 8 input pages, got {src.page_count}.")
 

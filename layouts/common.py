@@ -1,4 +1,8 @@
 """Shared helpers for the fitz_convert layouts."""
+from __future__ import annotations
+
+from typing import Iterable, Optional, Tuple
+
 import pymupdf
 
 PAGE_SIZES = {
@@ -7,7 +11,7 @@ PAGE_SIZES = {
 }
 
 
-def load_pages(paths):
+def load_pages(paths: Iterable[str]) -> pymupdf.Document:
     """Concatenate PDFs and images into one in-memory PDF (one page per source page/image)."""
     combined = pymupdf.open()
     for path in paths:
@@ -20,8 +24,17 @@ def load_pages(paths):
     return combined
 
 
-def place(page, rect, src, page_index, rotation=0, label_size=36, color=(1, 0, 0), guides=True):
-    """Draw source page `page_index` into `rect`, or a numbered placeholder if there's no such page."""
+def place(
+    page: pymupdf.Page,
+    rect: pymupdf.Rect,
+    src: Optional[pymupdf.Document],
+    page_index: int,
+    rotation: int = 0,
+    label_size: int = 36,
+    color: Tuple[float, float, float] = (1, 0, 0),
+    guides: bool = True,
+) -> None:
+    """Draw source page `page_index` into `rect`, or a numbered placeholder if it doesn't exist."""
     if src is not None and 0 <= page_index < src.page_count:
         page.show_pdf_page(rect, src, page_index, rotate=rotation)
     else:
@@ -35,5 +48,11 @@ def place(page, rect, src, page_index, rotation=0, label_size=36, color=(1, 0, 0
         page.draw_rect(rect, color=(0, 0, 0), width=1)
 
 
-def cut_line(page, rect, color=(1, 0, 0), thickness=0.5):
+def cut_line(
+    page: pymupdf.Page,
+    rect: pymupdf.Rect,
+    color: Tuple[float, float, float] = (1, 0, 0),
+    thickness: float = 0.5,
+) -> None:
+    """Draw a thin rectangle used as a cut line."""
     page.draw_rect(rect, color=color, width=thickness)

@@ -1,4 +1,4 @@
-"""Layout registry: name -> module exposing DESCRIPTION, add_arguments(parser), build(src, output, opts)."""
+"""Layout registry: name -> module (DESCRIPTION, add_arguments(parser), build(src, out, opts))."""
 from . import businesscard, minttin, pocketfold, pocketmod, zine
 
 LAYOUTS = {

@@ -8,8 +8,11 @@ Output is **US Letter** (612 × 792 pt) unless you pass `--page-size a4`.
 ## Setup
 
 ```powershell
-pip install pymupdf
+pip install -r requirements.txt     # just PyMuPDF
+pip install -e .                    # optional: installs the `fitz-convert` command
 ```
+
+Requires Python 3.9+. Licensed under the [MIT License](LICENSE).
 
 ## Usage
 
@@ -18,6 +21,8 @@ python fitz_convert.py <layout> -i IN [IN ...] -o OUT.pdf [options]
 python fitz_convert.py -h              # list layouts
 python fitz_convert.py <layout> -h     # options for one layout
 ```
+
+After `pip install -e .` you can use `fitz-convert` in place of `python fitz_convert.py`.
 
 `-i` takes one or more PDFs or images (PNG, JPG, ...). They are concatenated in
 order into one page sequence, and one output PDF is written per run.
@@ -64,36 +69,41 @@ python fitz_convert.py pocketmod --placeholder -o test_layout.pdf
 - `layouts/`: one module per layout plus `common.py`. To add a layout, create a
   module with `DESCRIPTION`, `add_arguments(parser)` and `build(src, output, opts)`,
   then register it in `layouts/__init__.py`.
-- `obsolete/`: the original single-purpose converters, kept for reference
-  (`pocketmod_convert.py`, `pocketfold_convert.py`, `zine_imposed.py`, `bus_card.py`).
+- `tests/`: pytest suite (`pip install -r requirements-dev.txt`, then `pytest`; lint with `ruff check .`).
+- `examples/`: standalone scripts that generate sample content (see below).
+- `tools/`: small PDF search utilities (`search_dirs.py`, `extract_search.py`).
+- `assets/`: sample images.
+
+The original single-purpose converters (`pocketmod_convert.py`, `pocketfold_convert.py`,
+`zine_imposed.py`, `bus_card.py`) were removed; they're in git history before the
+`obsolete/` cleanup commit if you need them.
 
 ## Making source PDFs
 
-These scripts generate content you can feed to the converter. They read and
-write the **current working directory**, so `cd` into their folder first.
+These scripts live in `examples/` and generate content you can feed to the converter.
+They read and write the **current working directory**, so `cd` into their folder first.
 
-- **PocketFold sample (10 pages):** `cd pocketfold; python generator.py` writes `generated_document.pdf`.
-- **PocketMod sample (8 pages):** `cd pocketmod; python fontsizes.py` writes `fontsizes.pdf`.
+- **PocketFold sample (10 pages):** `cd examples\pocketfold; python generator.py` writes `generated_document.pdf`.
+- **PocketMod sample (8 pages):** `cd examples\pocketmod; python fontsizes.py` writes `fontsizes.pdf`.
   `ebook_layout.py` writes `ebook_layout.pdf`.
-- **Zine pages:** `cd zine; python basic.py` writes blank `basic_zine.pdf` (half-letter
+- **Zine pages:** `cd examples\zine; python basic.py` writes blank `basic_zine.pdf` (half-letter
   pages, 5.5 × 8.5 in). Edit the call at the bottom of `added_content.py` (page number, title,
   body text, optional image) and run it to produce `zine_with_content.pdf`.
-- `zine_layout.py` (repo root) is a simpler 4-page zine on one Letter page: call
-  `create_zine(image_paths, text_content, output_file)` from your own code.
+- `examples\zine_layout.py` is a simpler 4-page zine on one Letter page using `assets\map7.png`.
 
-## Other scripts (repo root)
+## Other example scripts (`examples/`)
 
 | Script | Output / purpose |
 | --- | --- |
 | `generator.py` | Sample multi-page PDF with headers, d100 and card-draw grids |
-| `dice-roll.py` | `dice_roller_results.pdf` |
+| `dice_roll.py` | `dice_roller_results.pdf` |
 | `settings.py`, `settings2.py`, `margins.py` | Margin/grid layout experiments |
 | `calendar_added.py`, `content_layout.py` | Multi-page layouts with header/footer guides |
 | `paragraph.py`, `func_paragraphs.py` | Paragraph wrapping examples |
-| `layout.py`, `layout2.py`, `layout3.py` | eBook page layouts (`layout.py` is A5) |
+| `ebook_a5.py` | A5 eBook page layout |
 | `fitz_example.py` | PyMuPDF reference and mint-tin template (95 × 60 mm) |
 
 These are standalone and run directly with `python`; hardcoded output names
 will overwrite existing files. Not every output is Letter: `zine/basic.py` is
-half-letter, `layout.py` is A5, and `fitz_example.py` builds a mint-tin label
+half-letter, `ebook_a5.py` is A5, and `fitz_example.py` builds a mint-tin label
 by design.

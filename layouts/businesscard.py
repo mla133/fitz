@@ -3,16 +3,17 @@ import pymupdf
 
 from .common import PAGE_SIZES
 
-DESCRIPTION = "Tile the first input page or image N-up as business cards (--placeholder for a template)."
+DESCRIPTION = "Tile the first input page or image as business cards (--placeholder for a template)."
 
 
 def _card_size(text):
+    """Parse 'WxH' inches into (width, height) points."""
     try:
         w, h = (float(v) for v in text.lower().split("x"))
         if w <= 0 or h <= 0:
             raise ValueError
     except ValueError:
-        raise ValueError(f"--card-size must look like 3.5x2 (inches), got '{text}'.")
+        raise ValueError(f"--card-size must look like 3.5x2 (inches), got '{text}'.") from None
     return w * 72, h * 72
 
 
@@ -22,6 +23,7 @@ def add_arguments(parser):
 
 
 def build(src, output, opts):
+    """Write a sheet of cards tiled with page 1 of `src` (or a template if None) to `output`."""
     page_width, page_height = PAGE_SIZES[opts.page_size]
     card_w, card_h = _card_size(opts.card_size)
     cols, rows = int(page_width // card_w), int(page_height // card_h)

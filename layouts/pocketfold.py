@@ -15,10 +15,11 @@ BACK_ORDER = [(8, 270), (9, 270)]
 
 
 def add_arguments(parser):
-    pass
+    """No layout-specific options."""
 
 
 def build(src, output, opts):
+    """Write the two-sheet PocketFold for `src` (or placeholders if None) to `output`."""
     page_width, page_height = PAGE_SIZES[opts.page_size]
     mini_width, mini_height = page_width / 2, page_height / 4
     half_height = page_height / 2
@@ -32,12 +33,14 @@ def build(src, output, opts):
         rect = pymupdf.Rect(x0, y0, x0 + mini_width, y0 + mini_height)
         place(page1, rect, src, page_index, rotation, label_size=80, guides=opts.guides)
     if opts.guides:
-        cut_line(page1, pymupdf.Rect(0, half_height, page_width / 2, half_height + 0.5), color=(0, 1, 0))
+        cut_line(page1, pymupdf.Rect(0, half_height, page_width / 2, half_height + 0.5),
+                 color=(0, 1, 0))
 
     page2 = doc.new_page(width=page_width, height=page_height)
     for i, (page_index, rotation) in enumerate(BACK_ORDER):
         rect = pymupdf.Rect(0, i * half_height, page_width, (i + 1) * half_height)
-        place(page2, rect, src, page_index, rotation, label_size=36, color=(0, 0, 1), guides=opts.guides)
+        place(page2, rect, src, page_index, rotation, label_size=36, color=(0, 0, 1),
+              guides=opts.guides)
 
     doc.save(output)
     doc.close()

@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pymupdf
 
 def create_zine(image_paths, text_content, output_file):
@@ -52,7 +54,8 @@ def create_zine(image_paths, text_content, output_file):
 # --- Example Usage ---
 # You would need to have these files ready in your directory.
 # images = ["cover_art.png", "page_2_image.png", "page_3_image.png", "page_4_image.png"]
-images = ["map7.png", "map7.png", "map7.png", "map7.png"]
+ASSETS = Path(__file__).resolve().parent.parent / "assets"
+images = [str(ASSETS / "map7.png")] * 4
 text = [
     "A cool zine cover!",
     "This is the left-hand page of the inside spread.",

@@ -15,10 +15,11 @@ LAYOUT_ORDER = [
 
 
 def add_arguments(parser):
-    pass
+    """No layout-specific options."""
 
 
 def build(src, output, opts):
+    """Write the PocketMod sheet for `src` (or placeholders if None) to `output`."""
     page_width, page_height = PAGE_SIZES[opts.page_size]
     mini_width, mini_height = page_width / 2, page_height / 4
 

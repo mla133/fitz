@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fitz-tools"
+version = "0.1.0"
+description = "PyMuPDF tools that turn PDFs and images into printable folded layouts."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+dependencies = ["pymupdf"]
+
+[project.scripts]
+fitz-convert = "fitz_convert:main"
+
+[tool.setuptools]
+py-modules = ["fitz_convert"]
+packages = ["layouts"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.ruff]
+line-length = 100
+extend-exclude = ["examples", "tools"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B"]
