@@ -131,6 +131,13 @@ def test_images_are_accepted_as_input(tmp_path):
 
 # --- CLI -------------------------------------------------------------------
 
+def test_no_arguments_prints_help(capsys, monkeypatch):
+    monkeypatch.setattr("sys.argv", ["fitz_convert.py"])
+    assert main() == 0
+    out = capsys.readouterr().out
+    assert "usage:" in out and "pocketmod" in out and "zine" in out
+
+
 def test_cli_requires_input_unless_placeholder(tmp_path):
     with pytest.raises(SystemExit):
         main(["pocketmod", "-o", str(tmp_path / "o.pdf")])

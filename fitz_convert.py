@@ -31,6 +31,11 @@ def build_parser():
 
 def main(argv=None):
     parser = build_parser()
+    if argv is None:
+        argv = sys.argv[1:]
+    if not argv:
+        parser.print_help()
+        return 0
     opts = parser.parse_args(argv)
 
     if opts.placeholder:
