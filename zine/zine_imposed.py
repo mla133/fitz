@@ -4,55 +4,46 @@ def impose_zine_layout(input_pdf_path, output_pdf_path):
     """
     Arranges an 8-page PDF for printing as a single-sheet, double-sided zine.
     
-    The imposition order for an 8-page single-sheet zine is:
-    Side 1: [Page 8, Page 1] and [Page 4, Page 5]
-    Side 2: [Page 6, Page 3] and [Page 2, Page 7]
-    
-    The script assumes the input is an 8-page PDF (0-indexed).
+    Each side of a landscape letter sheet holds four pages; the top row is
+    printed upside down so the pages read correctly after folding:
+    Side 1: top [Page 5, Page 4] (rotated 180), bottom [Page 8, Page 1]
+    Side 2: top [Page 3, Page 6] (rotated 180), bottom [Page 2, Page 7]
+
+    Print double-sided, flipping on the short edge. Fold the top half down
+    behind the bottom, then fold in half so Page 1 is the front cover.
+
+    The script assumes the input is an 8-page PDF.
     """
     input_doc = pymupdf.open(input_pdf_path)
+    if input_doc.page_count != 8:
+        raise ValueError(f"Expected an 8-page PDF, got {input_doc.page_count} pages.")
     output_doc = pymupdf.open()
 
-    # The imposition requires two new pages in the output document
-    # for double-sided printing. The new pages will be standard letter size (8.5x11).
-    page_width = 8.5 * 72
-    page_height = 11 * 72
+    # Landscape US letter (11 x 8.5 inches)
+    sheet_width = 11 * 72
+    sheet_height = 8.5 * 72
+    half_width = sheet_width / 2
+    half_height = sheet_height / 2
 
-    # Create first output page for the front and back covers (folded side)
-    output_page1 = output_doc.new_page(width=page_height, height=page_width)
-    
-    # Create second output page for the interior pages
-    output_page2 = output_doc.new_page(width=page_height, height=page_width)
-
-    # Define the four quadrants for each letter-size page
-    half_width = page_height / 2
-    half_height = page_width / 2
-    
-    # Quadrant rectangles on the output page
     top_left = pymupdf.Rect(0, 0, half_width, half_height)
-    top_right = pymupdf.Rect(half_width, 0, page_height, half_height)
-    bottom_left = pymupdf.Rect(0, half_height, half_width, page_width)
-    bottom_right = pymupdf.Rect(half_width, half_height, page_height, page_width)
-    
-    # Side 1: pages 8, 1, 4, 5
-    # Pages 8 and 1 are placed on the front page, side-by-side
-    # The rect for page 8 (index 7) needs to be rotated and placed on the right.
-    # The rect for page 1 (index 0) is placed on the left.
-    output_page1.show_pdf_page(top_left, input_doc, 0)
-    output_page1.show_pdf_page(top_right, input_doc, 7, matrix=pymupdf.Matrix(0, 1, -1, 0))
+    top_right = pymupdf.Rect(half_width, 0, sheet_width, half_height)
+    bottom_left = pymupdf.Rect(0, half_height, half_width, sheet_height)
+    bottom_right = pymupdf.Rect(half_width, half_height, sheet_width, sheet_height)
 
-    # Pages 4 and 5 are on the bottom, but in a different orientation
-    output_page1.show_pdf_page(bottom_left, input_doc, 4)
-    output_page1.show_pdf_page(bottom_right, input_doc, 3, matrix=pymupdf.Matrix(0, 1, -1, 0))
-    
-    # Side 2: pages 6, 3, 2, 7
-    # Pages 6 and 3
-    output_page2.show_pdf_page(top_left, input_doc, 5)
-    output_page2.show_pdf_page(top_right, input_doc, 2, matrix=pymupdf.Matrix(0, 1, -1, 0))
-    
-    # Pages 2 and 7
-    output_page2.show_pdf_page(bottom_left, input_doc, 1)
-    output_page2.show_pdf_page(bottom_right, input_doc, 6, matrix=pymupdf.Matrix(0, 1, -1, 0))
+    # 0-based page indexes: (top_left, top_right, bottom_left, bottom_right)
+    sides = [
+        (4, 3, 7, 0),  # Side 1: pages 5, 4 / 8, 1
+        (2, 5, 1, 6),  # Side 2: pages 3, 6 / 2, 7
+    ]
+
+    for tl, tr, bl, br in sides:
+        # A new_page() call invalidates previously returned page objects,
+        # so each sheet is fully populated before the next is created.
+        sheet = output_doc.new_page(width=sheet_width, height=sheet_height)
+        sheet.show_pdf_page(top_left, input_doc, tl, rotate=180)
+        sheet.show_pdf_page(top_right, input_doc, tr, rotate=180)
+        sheet.show_pdf_page(bottom_left, input_doc, bl)
+        sheet.show_pdf_page(bottom_right, input_doc, br)
 
     output_doc.save(output_pdf_path)
     output_doc.close()
