@@ -1,7 +1,7 @@
 # Generates 8 sample pages of margin examples
 # Used as test example for pocketmod conversion
 
-import fitz  # PyMuPDF
+import pymupdf
 
 # Page dimensions
 page_width = 612
@@ -12,7 +12,7 @@ default_margins = {'left': 50, 'right': 50, 'top': 50, 'bottom': 50}
 alt_margins = {'left': 72, 'right': 72, 'top': 72, 'bottom': 72}  # 1 inch
 
 grid_spacing = 50
-doc = fitz.open()
+doc = pymupdf.open()
 
 def draw_margins(page, margins, color=(1, 0, 0)):
     page.draw_line((margins['left'], 0), (margins['left'], page_height), color=color)

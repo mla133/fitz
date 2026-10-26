@@ -1,4 +1,4 @@
-import fitz  # PyMuPDF
+import pymupdf
 
 # Page dimensions
 page_width = 612
@@ -22,7 +22,7 @@ lorem_text = (
 )
 
 # Create a new PDF document
-doc = fitz.open()
+doc = pymupdf.open()
 
 # Function to draw margins
 def draw_margins(page, margins, color=(1, 0, 0)):
@@ -46,7 +46,7 @@ def add_font_size_label(page, margins, font_size):
 
 # Function to add lorem text
 def add_lorem_text(page, margins, font_size):
-    rect = fitz.Rect(margins['left'], margins['top'], page_width - margins['right'], page_height - margins['bottom'])
+    rect = pymupdf.Rect(margins['left'], margins['top'], page_width - margins['right'], page_height - margins['bottom'])
     page.insert_textbox(rect, lorem_text, fontsize=font_size, color=(0, 0, 0), align=0)
 
 # Generate 8 pages with varying font sizes

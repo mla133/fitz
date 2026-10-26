@@ -1,7 +1,7 @@
-import fitz  # PyMuPDF
+import pymupdf
 import textwrap
 
-doc = fitz.open()
+doc = pymupdf.open()
 page = doc.new_page(width=595, height=842)  # A4 size
 
 text = """This is a long paragraph that should wrap nicely within the page.

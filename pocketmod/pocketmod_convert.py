@@ -1,4 +1,4 @@
-import fitz  # PyMuPDF
+import pymupdf
 
 #example_pdf = 'ebook_multipage_letter_FIXED.pdf'
 example_pdf = 'fontsizes.pdf'
@@ -7,7 +7,7 @@ def create_pocketmod_pdf(output_path='pocketmod_output.pdf', input_pdf_path=None
     page_width, page_height = 612, 792  # US Letter size
     mini_width, mini_height = page_width / 2, page_height / 4
 
-    doc = fitz.open()
+    doc = pymupdf.open()
     page = doc.new_page(width=page_width, height=page_height)
 
     # Correct PocketMod layout: (page_index, rotation)
@@ -24,7 +24,7 @@ def create_pocketmod_pdf(output_path='pocketmod_output.pdf', input_pdf_path=None
 
     input_pages = []
     if input_pdf_path:
-        input_doc = fitz.open(input_pdf_path)
+        input_doc = pymupdf.open(input_pdf_path)
         input_pages = [input_doc.load_page(i) for i in range(min(len(input_doc), 8))]
 
     for i, (page_index, rotation) in enumerate(layout_order):
@@ -32,7 +32,7 @@ def create_pocketmod_pdf(output_path='pocketmod_output.pdf', input_pdf_path=None
         row = i // 2
         x0 = col * mini_width
         y0 = row * mini_height
-        rect = fitz.Rect(x0, y0, x0 + mini_width, y0 + mini_height)
+        rect = pymupdf.Rect(x0, y0, x0 + mini_width, y0 + mini_height)
 
         if input_pages:
             page.show_pdf_page(rect, input_pages[page_index].parent, input_pages[page_index].number, rotate=rotation)
@@ -51,7 +51,7 @@ def create_pocketmod_pdf(output_path='pocketmod_output.pdf', input_pdf_path=None
     cut_color = (1, 0, 0)  # Red
     y_start = 1 * mini_height
     y_end = 3 * mini_height
-    cut_line = fitz.Rect(cut_x, y_start, cut_x + cut_line_thickness, y_end)
+    cut_line = pymupdf.Rect(cut_x, y_start, cut_x + cut_line_thickness, y_end)
     page.draw_rect(cut_line, color=cut_color, width=cut_line_thickness)
 
     doc.save(output_path)

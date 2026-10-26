@@ -1,7 +1,7 @@
-import fitz  # PyMuPDF
+import pymupdf
 
 # Create a new PDF document
-doc = fitz.open()
+doc = pymupdf.open()
 
 # Add a new page (A5 size is common for eBooks)
 page = doc.new_page(width=420, height=595)  # width, height in points
@@ -22,7 +22,7 @@ width = page.rect.width - 2 * margin
 
 # Title
 title_fontsize = 22
-title_rect = fitz.Rect(margin, 60, margin + width, 100)
+title_rect = pymupdf.Rect(margin, 60, margin + width, 100)
 page.insert_textbox(
     title_rect, title,
     fontname="helv", fontsize=title_fontsize,
@@ -31,7 +31,7 @@ page.insert_textbox(
 
 # Author
 author_fontsize = 14
-author_rect = fitz.Rect(margin, 105, margin + width, 130)
+author_rect = pymupdf.Rect(margin, 105, margin + width, 130)
 page.insert_textbox(
     author_rect, f"by {author}",
     fontname="helv", fontsize=author_fontsize,
@@ -50,7 +50,7 @@ page.draw_line(
 
 # Body text
 body_fontsize = 12
-body_rect = fitz.Rect(margin, line_y + 20, margin + width, 500)
+body_rect = pymupdf.Rect(margin, line_y + 20, margin + width, 500)
 page.insert_textbox(
     body_rect, body,
     fontname="helv", fontsize=body_fontsize,
@@ -61,7 +61,7 @@ page.insert_textbox(
 page_number = 1
 page_num_fontsize = 10
 page_num_text = f"{page_number}"
-page_num_rect = fitz.Rect(
+page_num_rect = pymupdf.Rect(
     page.rect.width / 2 - 20, page.rect.height - 40,
     page.rect.width / 2 + 20, page.rect.height - 20
 )

@@ -1,5 +1,5 @@
 
-import fitz  # PyMuPDF
+import pymupdf
 import textwrap
 import glob
 
@@ -10,7 +10,7 @@ LINE_HEIGHT = 16  # For fontsize=12
 # Get a list of text files (e.g., all .txt files in a folder)
 text_files = sorted(glob.glob("text/*.txt"))  # Adjust path as needed
 
-doc = fitz.open()
+doc = pymupdf.open()
 
 for i, file_path in enumerate(text_files):
     with open(file_path, "r", encoding="utf-8") as f:
@@ -32,7 +32,7 @@ for i, file_path in enumerate(text_files):
             page.insert_text((MARGIN, y), line, fontname="helv", fontsize=12, color=(0.1, 0.1, 0.1))
             y += LINE_HEIGHT
         # Page number (bottom center)
-        page_num_rect = fitz.Rect(PAGE_WIDTH / 2 - 20, PAGE_HEIGHT - 40, PAGE_WIDTH / 2 + 20, PAGE_HEIGHT - 20)
+        page_num_rect = pymupdf.Rect(PAGE_WIDTH / 2 - 20, PAGE_HEIGHT - 40, PAGE_WIDTH / 2 + 20, PAGE_HEIGHT - 20)
         page.insert_textbox(page_num_rect, str(doc.page_count), fontname="helv", fontsize=10, align=1, color=(0.2, 0.2, 0.2))
 
 doc.save("multiple_files_per_page.pdf")

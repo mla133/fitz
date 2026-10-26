@@ -1,4 +1,4 @@
-import fitz  # PyMuPDF
+import pymupdf
 
 # Define portrait letter-size page dimensions in points
 page_width = 612  # Letter width in points
@@ -11,7 +11,7 @@ margin_top = 50
 margin_bottom = 50
 
 # Create a new PDF document
-doc = fitz.open()
+doc = pymupdf.open()
 
 # Add a page with specified dimensions
 page = doc.new_page(width=page_width, height=page_height)

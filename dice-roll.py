@@ -1,8 +1,8 @@
-import fitz  # PyMuPDF
+import pymupdf
 import random
 
 # Create a new PDF document
-doc = fitz.open()
+doc = pymupdf.open()
 
 # Create a new page
 page = doc.new_page()
@@ -25,7 +25,7 @@ dice_results = {die: random.randint(1, max_val) for die, max_val in dice_types.i
 font_size = 28
 margin = 72
 spacing_y = 50
-page_width, page_height = fitz.paper_size("a4")
+page_width, page_height = pymupdf.paper_size("a4")
 
 # Insert title
 page.insert_text((margin, margin), "Dice Roller Results", fontsize=font_size + 4, fontname="helv", fill=(0, 0, 0))

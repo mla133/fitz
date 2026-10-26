@@ -1,4 +1,4 @@
-import fitz  # PyMuPDF
+import pymupdf
 
 def create_business_card_layout_with_visible_borders(output_path='business_cards_with_borders.pdf'):
     # US Letter size in points
@@ -13,7 +13,7 @@ def create_business_card_layout_with_visible_borders(output_path='business_cards
     max_cards = int(cols * rows)
 
     # Create a new blank PDF document
-    doc = fitz.open()
+    doc = pymupdf.open()
     page = doc.new_page(width=page_width, height=page_height)
 
     # Placeholder text and logo dimensions
@@ -27,7 +27,7 @@ def create_business_card_layout_with_visible_borders(output_path='business_cards
         row = i // int(cols)
         x0 = col * card_width
         y0 = row * card_height
-        rect = fitz.Rect(x0, y0, x0 + card_width, y0 + card_height)
+        rect = pymupdf.Rect(x0, y0, x0 + card_width, y0 + card_height)
 
         # Draw card border directly on the page
         page.draw_rect(rect, color=(0, 0, 1), width=1)  # Blue border
@@ -38,7 +38,7 @@ def create_business_card_layout_with_visible_borders(output_path='business_cards
         # Draw placeholder logo as a gray square
         logo_x0 = x0 + 10
         logo_y0 = y0 + 10
-        logo_rect = fitz.Rect(logo_x0, logo_y0, logo_x0 + logo_rect_width, logo_y0 + logo_rect_height)
+        logo_rect = pymupdf.Rect(logo_x0, logo_y0, logo_x0 + logo_rect_width, logo_y0 + logo_rect_height)
         page.draw_rect(logo_rect, color=(0.5, 0.5, 0.5), fill=(0.8, 0.8, 0.8))
 
         # Label the logo area

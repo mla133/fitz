@@ -1,4 +1,4 @@
-import fitz  # PyMuPDF
+import pymupdf
 
 def create_zine(image_paths, text_content, output_file):
     """
@@ -8,8 +8,8 @@ def create_zine(image_paths, text_content, output_file):
     :param text_content: A list of text strings for each page.
     :param output_file: The name of the output PDF file.
     """
-    doc = fitz.open()  # Create a new PDF document
-    page = doc.new_page(width=fitz.paper_size("a4")[0], height=fitz.paper_size("a4")[1])
+    doc = pymupdf.open()  # Create a new PDF document
+    page = doc.new_page(width=pymupdf.paper_size("a4")[0], height=pymupdf.paper_size("a4")[1])
 
     # A4 dimensions in points (approx. 595 x 842)
     page_width = page.rect.width
@@ -17,13 +17,13 @@ def create_zine(image_paths, text_content, output_file):
 
     # Coordinates for the four quadrants of the A4 page
     # Top-right corner for Zine Page 1
-    rect_p1 = fitz.Rect(page_width / 2, 0, page_width, page_height / 2)
+    rect_p1 = pymupdf.Rect(page_width / 2, 0, page_width, page_height / 2)
     # Top-left corner for Zine Page 2
-    rect_p2 = fitz.Rect(0, 0, page_width / 2, page_height / 2)
+    rect_p2 = pymupdf.Rect(0, 0, page_width / 2, page_height / 2)
     # Bottom-left corner for Zine Page 3
-    rect_p3 = fitz.Rect(0, page_height / 2, page_width / 2, page_height)
+    rect_p3 = pymupdf.Rect(0, page_height / 2, page_width / 2, page_height)
     # Bottom-right corner for Zine Page 4
-    rect_p4 = fitz.Rect(page_width / 2, page_height / 2, page_width, page_height)
+    rect_p4 = pymupdf.Rect(page_width / 2, page_height / 2, page_width, page_height)
 
     # Optional: Draw a grid to visualize the layout
     # This helps confirm placement during testing.

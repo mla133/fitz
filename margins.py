@@ -1,4 +1,4 @@
-import fitz  # PyMuPDF
+import pymupdf
 import textwrap
 
 def render_paragraphs_to_pdf_with_margins(
@@ -20,7 +20,7 @@ def render_paragraphs_to_pdf_with_margins(
     and includes visible margin lines on all four sides.
     """
     # Create a new PDF document
-    doc = fitz.open()
+    doc = pymupdf.open()
     page = doc.new_page(width=page_width, height=page_height)
 
     # Calculate usable width and line height

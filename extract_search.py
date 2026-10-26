@@ -1,7 +1,7 @@
-import fitz  # PyMuPDF
+import pymupdf
 
 def search_pdf_text(pdf_path, search_term):
-    doc = fitz.open(pdf_path)
+    doc = pymupdf.open(pdf_path)
     results = []
 
     for page_num in range(len(doc)):

@@ -1,11 +1,11 @@
-import fitz  # PyMuPDF
+import pymupdf
 import random
 
 # Create a new PDF document
-doc = fitz.open()
+doc = pymupdf.open()
 
 # Constants for layout
-page_width, page_height = fitz.paper_size("a4")
+page_width, page_height = pymupdf.paper_size("a4")
 margin = 72  # 1 inch margin
 font_size_header = 36
 font_size_body = 28

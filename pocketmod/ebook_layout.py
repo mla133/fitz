@@ -1,4 +1,4 @@
-import fitz  # PyMuPDF
+import pymupdf
 import textwrap
 
 # Constants for US Letter size and layout
@@ -18,18 +18,18 @@ body_text = (
 ) * 45  # Repeat to simulate long content
 
 # Create a new PDF document
-doc = fitz.open()
+doc = pymupdf.open()
 
 # --- Cover Page ---
 cover = doc.new_page(width=PAGE_WIDTH, height=PAGE_HEIGHT)
 
 # Title
-title_rect = fitz.Rect(MARGIN, 120, PAGE_WIDTH - MARGIN, 180)
+title_rect = pymupdf.Rect(MARGIN, 120, PAGE_WIDTH - MARGIN, 180)
 cover.insert_textbox(title_rect, title, fontname="helv", fontsize=28, align=1, color=(0, 0, 0.5))
 cover.draw_rect(title_rect, color=(1, 0, 0), width=1)  # Red border
 
 # Author
-author_rect = fitz.Rect(MARGIN, 190, PAGE_WIDTH - MARGIN, 220)
+author_rect = pymupdf.Rect(MARGIN, 190, PAGE_WIDTH - MARGIN, 220)
 cover.insert_textbox(author_rect, f"by {author}", fontname="helv", fontsize=16, align=1, color=(0.3, 0.3, 0.3))
 cover.draw_rect(author_rect, color=(0, 1, 0), width=1)  # Green border
 
@@ -56,12 +56,12 @@ for i, chunk in enumerate(chunks):
     page = doc.new_page(width=PAGE_WIDTH, height=PAGE_HEIGHT)
     y = MARGIN
     for line in chunk:
-        text_rect = fitz.Rect(MARGIN, y, PAGE_WIDTH - MARGIN, y + LINE_HEIGHT)
+        text_rect = pymupdf.Rect(MARGIN, y, PAGE_WIDTH - MARGIN, y + LINE_HEIGHT)
         page.insert_text((MARGIN, y), line, fontname="helv", fontsize=TEXT_FONT_SIZE, color=(0.1, 0.1, 0.1))
         page.draw_rect(text_rect, color=(0, 0, 1), width=0.5)  # Blue border around each line
         y += LINE_HEIGHT
     # Page number (bottom center)
-    page_num_rect = fitz.Rect(PAGE_WIDTH / 2 - 20, PAGE_HEIGHT - 40, PAGE_WIDTH / 2 + 20, PAGE_HEIGHT - 20)
+    page_num_rect = pymupdf.Rect(PAGE_WIDTH / 2 - 20, PAGE_HEIGHT - 40, PAGE_WIDTH / 2 + 20, PAGE_HEIGHT - 20)
     page.insert_textbox(page_num_rect, str(i + 1), fontname="helv", fontsize=10, align=1, color=(0.2, 0.2, 0.2))
     page.draw_rect(page_num_rect, color=(0, 0, 0), width=0.5)  # Black border
 

@@ -1,12 +1,12 @@
-import fitz  # PyMuPDF
+import pymupdf
 
 #####  Documentation methods #####
 # See all available methods and attributes
-#print(dir(fitz))
+#print(dir(pymupdf))
 # Explore a specific class, like Document or Page
-#print(dir(fitz.Document))
-#print(dir(fitz.Page))
-#help(fitz.Page)
+#print(dir(pymupdf.Document))
+#print(dir(pymupdf.Page))
+#help(pymupdf.Page)
 #exit()      # used to break the script early
 
 # Define dimensions for the mint tin template in millimeters
@@ -18,7 +18,7 @@ width_pt = width_mm * 2.83465
 height_pt = height_mm * 2.83465
 
 # Create a new PDF document
-doc = fitz.open()
+doc = pymupdf.open()
 
 # Add a page with the specified dimensions
 page = doc.new_page(width=width_pt, height=height_pt)
@@ -29,7 +29,7 @@ title_text = "Mint Tin Label Template"
 sample_text = "This is a sample content block for your mint tin design."
 
 # Draw decorative border
-rect = fitz.Rect(margin, margin, width_pt - margin, height_pt - margin)
+rect = pymupdf.Rect(margin, margin, width_pt - margin, height_pt - margin)
 page.draw_rect(rect, color=(0, 0, 0), width=1)
 
 # Add title at the top center using approximate centering
@@ -51,7 +51,7 @@ doc.close()
 
 # Testing to see if I can read the extracted text from the newly created file
 check_file = "mint_tin_template.pdf" 
-doc = fitz.open(check_file)
+doc = pymupdf.open(check_file)
 page = doc[0]
 text = page.get_text()  # Extract all text
 print(text)
@@ -66,15 +66,15 @@ PyMuPDF (fitz) Cheat Sheet
 
 Basic Setup
 -----------
-import fitz  # PyMuPDF
+import pymupdf
 
-doc = fitz.open("file.pdf")  # Open existing PDF
+doc = pymupdf.open("file.pdf")  # Open existing PDF
 page = doc[0]                # Access first page
 doc.save("new_file.pdf")     # Save changes
 
 Creating a New PDF
 ------------------
-doc = fitz.open()
+doc = pymupdf.open()
 page = doc.new_page(width=595, height=842)  # A4 size in points
 doc.save("blank.pdf")
 
@@ -84,12 +84,12 @@ page.insert_text((100, 100), "Hello World", fontsize=12, fontname="helv", fill=(
 
 Inserting Images
 ----------------
-rect = fitz.Rect(50, 50, 200, 200)
+rect = pymupdf.Rect(50, 50, 200, 200)
 page.insert_image(rect, filename="image.png")
 
 Drawing Shapes
 --------------
-rect = fitz.Rect(50, 50, 300, 150)
+rect = pymupdf.Rect(50, 50, 300, 150)
 page.draw_rect(rect, color=(1, 0, 0), width=2)  # Red border
 page.draw_circle((150, 100), radius=40, color=(0, 0, 1))  # Blue circle
 

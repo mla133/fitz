@@ -1,4 +1,4 @@
-import fitz  # PyMuPDF
+import pymupdf
 import textwrap
 
 def render_paragraphs_to_pdf(
@@ -19,7 +19,7 @@ def render_paragraphs_to_pdf(
     Renders a long string with multiple paragraphs into a PDF with proper spacing and wrapping.
     """
     # Create a new PDF document
-    doc = fitz.open()
+    doc = pymupdf.open()
     page = doc.new_page(width=page_width, height=page_height)
 
     # Calculate usable width and line height

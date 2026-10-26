@@ -1,16 +1,16 @@
-import fitz  # PyMuPDF
+import pymupdf
 
 def create_pocketfold_pdf(output_path='pocketfold_output.pdf', input_pdf_path=None):
     page_width, page_height = 612, 792  # US Letter size
     mini_width, mini_height = page_width / 2, page_height / 4
     half_height = page_height / 2
 
-    doc = fitz.open()
+    doc = pymupdf.open()
 
     # Load input pages if provided
     input_pages = []
     if input_pdf_path:
-        input_doc = fitz.open(input_pdf_path)
+        input_doc = pymupdf.open(input_pdf_path)
         input_pages = [input_doc.load_page(i) for i in range(len(input_doc))]
 
     # First page: 8 mini-pages
@@ -27,7 +27,7 @@ def create_pocketfold_pdf(output_path='pocketfold_output.pdf', input_pdf_path=No
         row = i // 2
         x0 = col * mini_width
         y0 = row * mini_height
-        rect = fitz.Rect(x0, y0, x0 + mini_width, y0 + mini_height)
+        rect = pymupdf.Rect(x0, y0, x0 + mini_width, y0 + mini_height)
 
         if input_pages and page_index < len(input_pages):
             page1.show_pdf_page(rect, input_pages[page_index].parent, input_pages[page_index].number, rotate=rotation)
@@ -43,7 +43,7 @@ def create_pocketfold_pdf(output_path='pocketfold_output.pdf', input_pdf_path=No
     # Add horizontal cut line between mini pages 5 & 6 (rows 2 and 3)
     cut_line_thickness = 0.5
     cut_color = (0, 1, 0)
-    cut_line = fitz.Rect(0, page_height / 2, page_width / 2, (page_height / 2) + cut_line_thickness)
+    cut_line = pymupdf.Rect(0, page_height / 2, page_width / 2, (page_height / 2) + cut_line_thickness)
     page1.draw_rect(cut_line, color=cut_color, width=cut_line_thickness)
 
     # Second page: 2 half-pages
@@ -55,7 +55,7 @@ def create_pocketfold_pdf(output_path='pocketfold_output.pdf', input_pdf_path=No
     for i, (page_index, rotation) in enumerate(half_page_order):
         x0 = 0
         y0 = i * half_height
-        rect = fitz.Rect(x0, y0, x0 + page_width, y0 + half_height)
+        rect = pymupdf.Rect(x0, y0, x0 + page_width, y0 + half_height)
 
         if input_pages and page_index < len(input_pages):
             page2.show_pdf_page(rect, input_pages[page_index].parent, input_pages[page_index].number, rotate=rotation)

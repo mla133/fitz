@@ -1,4 +1,4 @@
-import fitz  # PyMuPDF
+import pymupdf
 import os
 
 def search_pdfs_in_directory(directory_path, search_term):
@@ -7,7 +7,7 @@ def search_pdfs_in_directory(directory_path, search_term):
     for filename in os.listdir(directory_path):
         if filename.lower().endswith(".pdf"):
             file_path = os.path.join(directory_path, filename)
-            doc = fitz.open(file_path)
+            doc = pymupdf.open(file_path)
 
             for page_num in range(len(doc)):
                 page = doc.load_page(page_num)
