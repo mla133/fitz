@@ -75,7 +75,7 @@ doc.save("new_file.pdf")     # Save changes
 Creating a New PDF
 ------------------
 doc = pymupdf.open()
-page = doc.new_page(width=595, height=842)  # A4 size in points
+page = doc.new_page(width=612, height=792)  # US Letter size in points
 doc.save("blank.pdf")
 
 Inserting Text

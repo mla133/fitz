@@ -5,7 +5,7 @@ import random
 doc = pymupdf.open()
 
 # Constants for layout
-page_width, page_height = pymupdf.paper_size("a4")
+page_width, page_height = pymupdf.paper_size("letter")
 margin = 72  # 1 inch margin
 font_size_header = 36
 font_size_body = 28
@@ -13,7 +13,7 @@ font_size_grid = 12
 
 # Add pages 1 to 8 with headers and body text
 for i in range(1, 9):
-    page = doc.new_page()
+    page = doc.new_page(width=page_width, height=page_height)
     header_text = f"Page {i} Header"
     body_text = f"This is the body text for page {i}."
 
@@ -23,7 +23,7 @@ for i in range(1, 9):
     page.insert_text((margin, margin + 60), body_text, fontsize=font_size_body, fontname="Courier", fill=(0, 0, 0))
 
 # Page 9: Auto-generated rolls from 1 to 100 in grid format filling the page
-page9 = doc.new_page()
+page9 = doc.new_page(width=page_width, height=page_height)
 d100_rolls = [random.randint(1, 100) for _ in range(400)]
 
 # Calculate grid layout
@@ -56,7 +56,7 @@ for idx, roll in enumerate(d100_rolls):
 
 
 # Page 10: Simulated card draws
-page10 = doc.new_page()
+page10 = doc.new_page(width=page_width, height=page_height)
 pg10_header = f"Page 10 Header"
 page10.insert_text((margin, margin), "Page 10 Header", fontsize=font_size_header, fontname="Courier", fill=(0, 0, 0))
 

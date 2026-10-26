@@ -2,20 +2,20 @@ import pymupdf
 
 def create_zine(image_paths, text_content, output_file):
     """
-    Generates a foldable four-page zine layout on a single A4 sheet.
+    Generates a foldable four-page zine layout on a single US Letter sheet.
 
     :param image_paths: A list of file paths to the images for each page.
     :param text_content: A list of text strings for each page.
     :param output_file: The name of the output PDF file.
     """
     doc = pymupdf.open()  # Create a new PDF document
-    page = doc.new_page(width=pymupdf.paper_size("a4")[0], height=pymupdf.paper_size("a4")[1])
+    page = doc.new_page(width=pymupdf.paper_size("letter")[0], height=pymupdf.paper_size("letter")[1])
 
-    # A4 dimensions in points (approx. 595 x 842)
+    # US Letter dimensions in points (612 x 792)
     page_width = page.rect.width
     page_height = page.rect.height
 
-    # Coordinates for the four quadrants of the A4 page
+    # Coordinates for the four quadrants of the Letter page
     # Top-right corner for Zine Page 1
     rect_p1 = pymupdf.Rect(page_width / 2, 0, page_width, page_height / 2)
     # Top-left corner for Zine Page 2

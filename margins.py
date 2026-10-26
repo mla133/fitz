@@ -4,8 +4,8 @@ import textwrap
 def render_paragraphs_to_pdf_with_margins(
     text,
     output_file="formatted_paragraphs_with_margins.pdf",
-    page_width=595,
-    page_height=842,
+    page_width=612,
+    page_height=792,
     left_margin=50,
     top_margin=50,
     right_margin=50,

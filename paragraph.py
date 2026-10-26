@@ -2,7 +2,7 @@ import pymupdf
 import textwrap
 
 doc = pymupdf.open()
-page = doc.new_page(width=595, height=842)  # A4 size
+page = doc.new_page(width=612, height=792)  # US Letter size
 
 text = """This is a long paragraph that should wrap nicely within the page.
 Here's another paragraph that follows the first one. It should be spaced properly."""
