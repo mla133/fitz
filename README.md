@@ -1,8 +1,9 @@
-# fitz – PDF mini-book and zine generators
+# fitz – PDF mini-book and zine tools
 
-Small [PyMuPDF](https://pymupdf.readthedocs.io/) scripts that build printable
-PDFs: PocketFold, PocketMod, business-card sheets, and an 8-page zine. All
-output is **US Letter** (612 × 792 pt) unless noted.
+[PyMuPDF](https://pymupdf.readthedocs.io/) tools that turn PDFs and images into
+printable folded layouts: PocketMod, PocketFold, a one-sheet zine and
+business-card sheets. Everything goes through one command, `fitz_convert.py`.
+Output is **US Letter** (612 × 792 pt) unless you pass `--page-size a4`.
 
 ## Setup
 
@@ -10,115 +11,75 @@ output is **US Letter** (612 × 792 pt) unless noted.
 pip install pymupdf
 ```
 
-Every script is run directly with `python` and reads/writes files in the
-**current working directory**, so `cd` into the script's folder first.
-
-## Unified converter (`fitz_convert.py`)
+## Usage
 
 ```powershell
 python fitz_convert.py <layout> -i IN [IN ...] -o OUT.pdf [options]
+python fitz_convert.py -h              # list layouts
+python fitz_convert.py <layout> -h     # options for one layout
 ```
 
-Layouts: `pocketmod`, `pocketfold`, `zine`, `businesscard`, `minttin` (stub, not implemented yet; planned to fit standard and mini Altoids tins).
-`-i` takes one or more PDFs/images, concatenated in order. Options: `--page-size letter|a4`,
-`--no-guides` (omit borders/cut lines), `--placeholder` (no input; numbered or template cells),
-`--card-size WxH` (businesscard, inches). `zine` needs exactly 8 pages, `pocketfold` 10,
-`pocketmod` uses the first 8; `businesscard` tiles the first page or image.
+`-i` takes one or more PDFs or images (PNG, JPG, ...). They are concatenated in
+order into one page sequence, and one output PDF is written per run.
+
+### Layouts
+
+| Layout | Input pages | Output |
+| --- | --- | --- |
+| `pocketmod` | first 8 used | 1 Letter sheet: 8 pages, 2 × 4 grid, red cut line |
+| `pocketfold` | 10 | Sheet 1: 8 mini-pages and a green cut line. Sheet 2: pages 9 and 10 as two half-pages |
+| `zine` | exactly 8 | 2 landscape sides, one-sheet zine (print double-sided, flip on short edge; fold the top half down behind the bottom, then in half) |
+| `businesscard` | first page or image | Card sheet (default 3.5 × 2 in, 10 per Letter page) tiled with the input |
+| `minttin` | n/a | **Not implemented yet.** Planned: a zine that fits a standard or mini Altoids tin (`--tin standard\|mini`) |
+
+Missing pages in `pocketmod` and `pocketfold` are filled with numbered
+placeholders. `zine` fails with an error unless the input has exactly 8 pages.
+
+### Options
+
+| Option | Meaning |
+| --- | --- |
+| `-i, --input FILE...` | Input PDFs/images (required unless `--placeholder`) |
+| `-o, --output PDF` | Output path (required; existing files are overwritten) |
+| `--page-size letter\|a4` | Sheet size (default `letter`) |
+| `--no-guides` | Omit cell borders and cut lines |
+| `--placeholder` | Ignore input; draw numbered pages (or a sample card) |
+| `--card-size WxH` | `businesscard` only: card size in inches (default `3.5x2`) |
+
+### Examples
 
 ```powershell
 python fitz_convert.py pocketmod -i fontsizes.pdf -o pocketmod_output.pdf
-python fitz_convert.py businesscard -i card.png -o cards.pdf
-python fitz_convert.py -h
+python fitz_convert.py pocketfold -i intro.pdf body.pdf -o pocketfold_output.pdf
+python fitz_convert.py zine -i zine_with_content.pdf -o zine_imposed_for_print.pdf
+python fitz_convert.py businesscard -i card.png -o cards.pdf --card-size 3.5x2
+python fitz_convert.py pocketmod --placeholder -o test_layout.pdf
 ```
 
-The original per-layout converters are archived in `obsolete/`; the sections below
-describe the source-PDF generators and the old workflow, so substitute `fitz_convert.py` for the `*_convert.py` / `bus_card.py` / `zine_imposed.py` steps.
+**Print:** 100% / "Actual size" (no fit-to-page scaling).
 
-## PocketFold (`pocketfold/`)
+### Project layout
 
-An 8-page mini-book on one side of a Letter sheet, plus two half-page
-sheets on the back (10 pages total).
+- `fitz_convert.py`: command-line entry point (argparse subcommands).
+- `layouts/`: one module per layout plus `common.py`. To add a layout, create a
+  module with `DESCRIPTION`, `add_arguments(parser)` and `build(src, output, opts)`,
+  then register it in `layouts/__init__.py`.
+- `obsolete/`: the original single-purpose converters, kept for reference
+  (`pocketmod_convert.py`, `pocketfold_convert.py`, `zine_imposed.py`, `bus_card.py`).
 
-1. Generate a 10-page source PDF (sample content, written to `generated_document.pdf`):
-   ```powershell
-   cd pocketfold
-   python generator.py
-   ```
-2. Impose it into the PocketFold layout:
-   ```powershell
-   python pocketfold_convert.py
-   ```
-   Output: `pocketfold_output.pdf`.
+## Making source PDFs
 
-To use your own content, replace `generated_document.pdf` with your own PDF
-(10 pages) or edit the `input_pdf_path` in the last line of
-`pocketfold_convert.py`. Uncomment `create_pocketfold_pdf()` instead to get a
-numbered dummy layout without any input.
+These scripts generate content you can feed to the converter. They read and
+write the **current working directory**, so `cd` into their folder first.
 
-Page 1 holds 8 mini-pages (2 × 4 grid, alternating rotation); a green line
-marks the cut. Page 2 holds pages 9 and 10 as two rotated half-pages.
-
-## PocketMod (`pocketmod/`)
-
-An 8-page booklet from a single Letter sheet: print one side, fold, cut the
-center slit, and fold into a booklet.
-
-1. Create a source PDF (text sample with various font sizes → `fontsizes.pdf`):
-   ```powershell
-   cd pocketmod
-   python fontsizes.py
-   ```
-   Alternatively use `ebook_layout.py` (writes `ebook_layout.pdf`; point
-   `example_pdf` at it).
-2. Impose it:
-   ```powershell
-   python pocketmod_convert.py
-   ```
-   Output: `pocketmod_output.pdf`.
-
-The input PDF is set by `example_pdf` at the top of `pocketmod_convert.py`;
-only the first 8 pages are used. Uncomment `create_pocketmod_pdf()` at the
-bottom for a numbered dummy layout. The red line marks the cut.
-
-**Print:** Letter, 100% / "Actual size" (no fit-to-page scaling).
-
-## Business cards (`business_card/`)
-
-```powershell
-cd business_card
-python bus_card.py
-```
-
-Output: `business_cards_with_borders.pdf` – a Letter sheet filled with
-3.5 × 2 in cards (2 × 5 = 10 cards) with blue borders, placeholder name text,
-and a gray "Logo" box. To customize, edit `placeholder_text`, the logo
-dimensions, and card size constants in `create_business_card_layout_with_visible_borders`.
-
-## Zine (`zine/`)
-
-An 8-page, single-sheet folded zine (half-letter pages, 5.5 × 8.5 in).
-
-1. Create the blank pages (`basic_zine.pdf`):
-   ```powershell
-   cd zine
-   python basic.py
-   ```
-2. Add content to a page (`zine_with_content.pdf`). Edit the call at the
-   bottom of `added_content.py` to set the page number, title, body text,
-   and optional image path (e.g. `add_content_to_page(doc, 0, "Title", "Text", "my_image.png")`):
-   ```powershell
-   python added_content.py
-   ```
-3. Impose for printing on a landscape Letter sheet (`zine_imposed_for_print.pdf`):
-   ```powershell
-   python zine_imposed.py
-   ```
-   The input must have exactly 8 pages. Print **double-sided, flip on short
-   edge**. Fold the top half down behind the bottom, then fold in half so
-   Page 1 is the front cover.
-
-`zine_layout.py` (repo root) is a simpler 4-page zine on one Letter page:
-call `create_zine(image_paths, text_content, output_file)` from your own code.
+- **PocketFold sample (10 pages):** `cd pocketfold; python generator.py` writes `generated_document.pdf`.
+- **PocketMod sample (8 pages):** `cd pocketmod; python fontsizes.py` writes `fontsizes.pdf`.
+  `ebook_layout.py` writes `ebook_layout.pdf`.
+- **Zine pages:** `cd zine; python basic.py` writes blank `basic_zine.pdf` (half-letter
+  pages, 5.5 × 8.5 in). Edit the call at the bottom of `added_content.py` (page number, title,
+  body text, optional image) and run it to produce `zine_with_content.pdf`.
+- `zine_layout.py` (repo root) is a simpler 4-page zine on one Letter page: call
+  `create_zine(image_paths, text_content, output_file)` from your own code.
 
 ## Other scripts (repo root)
 
@@ -132,8 +93,7 @@ call `create_zine(image_paths, text_content, output_file)` from your own code.
 | `layout.py`, `layout2.py`, `layout3.py` | eBook page layouts (`layout.py` is A5) |
 | `fitz_example.py` | PyMuPDF reference and mint-tin template (95 × 60 mm) |
 
-## Notes
-
-- Scripts with hardcoded input/output names will overwrite existing files.
-- Not every output is Letter: `zine/basic.py` is half-letter, `layout.py`
-  is A5, and `fitz_example.py` builds a mint-tin label by design.
+These are standalone and run directly with `python`; hardcoded output names
+will overwrite existing files. Not every output is Letter: `zine/basic.py` is
+half-letter, `layout.py` is A5, and `fitz_example.py` builds a mint-tin label
+by design.
